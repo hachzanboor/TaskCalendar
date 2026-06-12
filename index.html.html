@@ -1,0 +1,1232 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت کارهای شخصی - نسخه آفلاین</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tahoma', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .login-container {
+            max-width: 450px;
+            margin: 80px auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-header {
+            background: linear-gradient(135deg, #1e3c72, #2b4c7c);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .login-header h1 { font-size: 1.8rem; margin-bottom: 5px; }
+        .login-header p { opacity: 0.9; }
+        .login-form {
+            padding: 30px;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .login-form input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+        .login-error {
+            color: #dc2626;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .login-success {
+            color: #10b981;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .main-container {
+            display: none;
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2b4c7c);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 { font-size: 1.8rem; margin-bottom: 5px; }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            gap: 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .toolbar-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+        }
+        .toolbar-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        button {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        button:hover { background: #e2e8f0; transform: translateY(-2px); }
+        .btn-primary { background: #3b82f6; color: white; box-shadow: 0 2px 5px rgba(59,130,246,0.3); }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-warning:hover { background: #d97706; }
+        .month-year {
+            background: white;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: #1e3c72;
+            font-size: 1rem;
+        }
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: bold;
+            background: #e0f2fe;
+            padding: 12px 0;
+            border-radius: 20px;
+            margin: 15px;
+            color: #0369a1;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            padding: 15px;
+        }
+        .day-cell {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 10px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 85px;
+            border: 1px solid #e2e8f0;
+        }
+        .day-cell:hover { background: #dbeafe; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .day-number { font-size: 1.2rem; font-weight: bold; color: #334155; }
+        .task-badge {
+            background: #ef4444;
+            color: white;
+            border-radius: 30px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-weight: bold;
+        }
+        .today { background: #fef3c7 !important; border: 2px solid #f59e0b !important; }
+        .today-gregorian {
+            background: #fef3c7 !important;
+            border: 2px solid #f59e0b !important;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.25);
+        }
+        .selected-day { background: #bfdbfe; border: 2px solid #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
+        .tasks-section {
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            background: #fffbeb;
+        }
+        .task-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .task-form input, .task-form select {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 1rem;
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .task-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-right: 5px solid;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+        .task-item:hover { transform: translateX(-5px); }
+        .task-done { text-decoration: line-through; opacity: 0.6; }
+        .task-title { font-weight: 500; }
+        .task-actions button {
+            background: none;
+            padding: 5px 12px;
+            margin: 0 3px;
+        }
+        .fixed-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 999;
+        }
+        @media (max-width: 700px) {
+            .calendar-grid { gap: 4px; }
+            .day-cell { min-height: 65px; padding: 8px 2px; }
+            .day-number { font-size: 1rem; }
+            .toolbar-row { flex-direction: column; align-items: stretch; }
+            .toolbar-group { justify-content: center; }
+        }
+        .priority-high { color: #dc2626; font-weight: bold; }
+        .priority-medium { color: #f59e0b; font-weight: bold; }
+        .priority-low { color: #10b981; font-weight: bold; }
+        .date-gregorian-small {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: normal;
+            direction: ltr;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+        .jalali-date-small {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: normal;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+        .logout-text-only {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div id="loginPage" class="login-container">
+    <div class="login-header">
+        <h1>📅 سامانه مدیریت کارهای شخصی</h1>
+        <p>لطفاً وارد شوید یا ثبت‌نام کنید</p>
+    </div>
+    <div class="login-form">
+        <input type="text" id="loginUsername" placeholder="نام کاربری">
+        <input type="password" id="loginPassword" placeholder="رمز عبور">
+        <button id="doLoginBtn" class="btn-primary">ورود به حساب</button>
+        <button id="doSignupBtn" class="btn-success">ثبت‌نام جدید</button>
+        <div id="loginMessage"></div>
+    </div>
+</div>
+
+<div id="mainApp" class="main-container">
+    <div class="header">
+        <h1>📅 سامانه مدیریت کارهای شخصی</h1>
+    </div>
+    <div class="toolbar">
+        <div class="toolbar-row">
+            <div class="toolbar-group">
+                <button id="prevBtn" class="btn-warning">◀ ماه قبل</button>
+                <button id="nextBtn" class="btn-warning">ماه بعد ▶</button>
+            </div>
+            <div class="toolbar-group">
+                <button id="exportPDFBtn" class="btn-success">خروجی PDF</button>
+                <button id="syncGoogleBtn">سینک با گوگل</button>
+            </div>
+        </div>
+        <div class="toolbar-row">
+            <div class="toolbar-group">
+                <button id="monthViewBtn" class="btn-primary">ماهانه</button>
+                <button id="weekViewBtn">هفتگی</button>
+                <button id="dayViewBtn">روزانه</button>
+            </div>
+            <div class="toolbar-group">
+                <button id="jalaliModeBtn" class="btn-primary">تقویم شمسی</button>
+                <button id="gregorianModeBtn">تقویم میلادی</button>
+                <div class="month-year" id="monthYearDisplay"></div>
+            </div>
+        </div>
+    </div>
+    <div class="weekdays" id="weekdaysContainer"></div>
+    <div id="calendar" class="calendar-grid"></div>
+    <div class="tasks-section">
+        <h3>وظایف روز: <span id="selectedDateLabel">هیچ روزی انتخاب نشده</span></h3>
+        <div class="task-form">
+            <input type="text" id="taskTitle" placeholder="عنوان کار ...">
+            <select id="taskPriority">
+                <option value="low">اولویت کم</option>
+                <option value="medium" selected>اولویت متوسط</option>
+                <option value="high">اولویت بالا</option>
+            </select>
+            <button id="addTaskBtn" class="btn-primary">افزودن کار</button>
+        </div>
+        <div id="tasksContainer" class="task-list"></div>
+    </div>
+</div>
+
+<div class="fixed-buttons">
+    <button id="logoutBtn" class="btn-danger logout-text-only" style="display: none;">خروج از حساب</button>
+</div>
+
+<script>
+    // ======================== تبدیل تاریخ شمسی ========================
+    (function(){
+        window.gregorianToJalali = function(gy, gm, gd) {
+            var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            var jy = (gy <= 1600) ? 0 : 979;
+            gy -= (gy <= 1600) ? 621 : 1600;
+            var gy2 = (gy > 2) ? (gy + 1) : gy;
+            var days = (365 * gy) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm-1];
+            jy += 33 * (parseInt(days / 12053));
+            days %= 12053;
+            jy += 4 * (parseInt(days / 1461));
+            days %= 1461;
+            if (days > 365) {
+                jy += parseInt((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            var jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+            var jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+            return {jy: jy, jm: jm, jd: jd};
+        };
+        window.jalaliToGregorian = function(jy, jm, jd) {
+            jy += 1595;
+            var days = -355668 + (365 * jy) + (parseInt(jy / 33)) * 8 + (parseInt(((jy % 33) + 3) / 4)) + jd;
+            if (jm < 7) days += (jm - 1) * 31;
+            else days += 186 + (jm - 7) * 30;
+            var gy = 400 * (parseInt(days / 146097));
+            days %= 146097;
+            if (days > 36524) {
+                days -= 1;
+                gy += 100 * (parseInt(days / 36524));
+                days %= 36524;
+                if (days >= 365) days++;
+            }
+            gy += 4 * (parseInt(days / 1461));
+            days %= 1461;
+            if (days > 365) {
+                gy += parseInt((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            var gd = days + 1;
+            var sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || gy % 400 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var gm = 0;
+            for (; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
+            return {gy: gy, gm: gm, gd: gd};
+        };
+    })();
+
+    let currentMode = "jalali";     
+    let currentJYear = 1404;        
+    let currentJMonth = 2;          
+    let selectedDate = null;        
+    let tasks = {};                 
+    let currentView = "month";      
+    let currentUser = null;         
+    let weekStartDate = null;       
+
+    const weekDaysFa = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"];
+    const weekDaysEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    // تاریخ امروز میلادی به فرمت YYYY-MM-DD
+    let globalTodayStr = null;
+    
+    function updateGlobalToday() {
+        let d = new Date();
+        let year = d.getFullYear();
+        let month = String(d.getMonth() + 1).padStart(2, '0');
+        let day = String(d.getDate()).padStart(2, '0');
+        globalTodayStr = `${year}-${month}-${day}`;
+        return globalTodayStr;
+    }
+    
+    function getTodayGregorian() {
+        if (!globalTodayStr) updateGlobalToday();
+        return globalTodayStr;
+    }
+
+    function getTodayJalali() {
+        let today = new Date();
+        let j = gregorianToJalali(today.getFullYear(), today.getMonth()+1, today.getDate());
+        return {year: j.jy, month: j.jm, day: j.jd};
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function jalaaliIsLeapYear(jy) {
+        let mod = jy % 33;
+        return (mod === 1 || mod === 5 || mod === 9 || mod === 13 || mod === 17 || mod === 22 || mod === 26 || mod === 30);
+    }
+
+    function updateWeekdays() {
+        let container = document.getElementById("weekdaysContainer");
+        if (currentMode === "jalali") {
+            container.innerHTML = weekDaysFa.map(d => `<span>${d}</span>`).join('');
+        } else {
+            container.innerHTML = weekDaysEn.map(d => `<span>${d}</span>`).join('');
+        }
+    }
+
+    function loadUsers() {
+        let users = localStorage.getItem("app_users");
+        return users ? JSON.parse(users) : {};
+    }
+    function saveUsers(users) {
+        localStorage.setItem("app_users", JSON.stringify(users));
+    }
+    function login(username, password) {
+        let users = loadUsers();
+        if (users[username] && users[username].password === password) {
+            currentUser = username;
+            localStorage.setItem("current_user", username);
+            loadUserTasks();
+            return true;
+        }
+        return false;
+    }
+    function signup(username, password) {
+        let users = loadUsers();
+        if (users[username]) return false;
+        users[username] = { password: password };
+        saveUsers(users);
+        return login(username, password);
+    }
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem("current_user");
+        tasks = {};
+        selectedDate = null;
+        document.getElementById("loginPage").style.display = "block";
+        document.getElementById("mainApp").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "none";
+        document.getElementById("loginUsername").value = "";
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("loginMessage").innerHTML = "";
+    }
+    function loadUserTasks() {
+        let allTasks = localStorage.getItem(`tasks_${currentUser}`);
+        tasks = allTasks ? JSON.parse(allTasks) : {};
+        if (selectedDate && !tasks[selectedDate]) tasks[selectedDate] = [];
+    }
+    function loadTasksForDate(dateStr) {
+        if (!currentUser) return [];
+        if (!tasks[dateStr]) tasks[dateStr] = [];
+        return tasks[dateStr];
+    }
+    function saveTasksForDate(dateStr) {
+        if (!currentUser) return;
+        localStorage.setItem(`tasks_${currentUser}`, JSON.stringify(tasks));
+    }
+
+    function exportToPDF() {
+        if (!currentUser) {
+            alert("لطفاً ابتدا وارد شوید.");
+            return;
+        }
+        
+        let allTasksList = [];
+        for (let date in tasks) {
+            if (tasks[date] && tasks[date].length > 0) {
+                tasks[date].forEach(task => {
+                    let parts = date.split('-');
+                    let jDate = gregorianToJalali(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
+                    allTasksList.push({
+                        date: `${jDate.jy}/${jDate.jm}/${jDate.jd}`,
+                        title: task.title,
+                        priority: task.priority === 'high' ? 'بالا' : (task.priority === 'medium' ? 'متوسط' : 'کم'),
+                        priorityValue: task.priority,
+                        status: task.done ? 'انجام شده' : 'انجام نشده'
+                    });
+                });
+            }
+        }
+        
+        allTasksList.sort((a,b) => a.date.localeCompare(b.date));
+        let today = new Date();
+        let todayStr = today.toLocaleDateString('fa-IR');
+        let rows = '';
+        if (allTasksList.length === 0) {
+            rows = '<tr><td colspan="5" style="text-align:center; padding:20px;">هیچ کاری ثبت نشده است</td></tr>';
+        } else {
+            allTasksList.forEach((task, index) => {
+                let priorityStyle = task.priorityValue === 'high' ? 'color:#dc2626;' : (task.priorityValue === 'medium' ? 'color:#f59e0b;' : 'color:#10b981;');
+                rows += `
+                    <tr>
+                        <td style="border:1px solid #ddd; padding:8px; text-align:center;">${index + 1}</td>
+                        <td style="border:1px solid #ddd; padding:8px; text-align:center;">${task.date}</td>
+                        <td style="border:1px solid #ddd; padding:8px;">${escapeHtml(task.title)}</td>
+                        <td style="border:1px solid #ddd; padding:8px; text-align:center; ${priorityStyle} font-weight:bold;">${task.priority}</td>
+                        <td style="border:1px solid #ddd; padding:8px; text-align:center;">${task.status}</td>
+                    </tr>
+                `;
+            });
+        }
+        
+        let totalHtml = `
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body { font-family: Tahoma, sans-serif; direction: rtl; padding: 30px; margin: 0; }
+                    .header { background: linear-gradient(135deg, #1e3c72, #2b4c7c); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
+                    h2 { margin: 0 0 5px 0; }
+                    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    th { background: #3b82f6; color: white; padding: 10px; border: 1px solid #ccc; }
+                    td { border: 1px solid #ddd; padding: 8px; }
+                    .footer { margin-top: 30px; padding: 15px; background: #f1f5f9; border-radius: 10px; text-align: center; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h2>گزارش وظایف</h2>
+                    <p>کاربر: ${escapeHtml(currentUser)} | تاریخ: ${todayStr}</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>تاریخ شمسی</th>
+                            <th>عنوان کار</th>
+                            <th>اولویت</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+                <div class="footer">
+                    <p>این گزارش توسط سامانه مدیریت کارهای شخصی تولید شده است.</p>
+                    <p>تعداد کل وظایف: ${allTasksList.length}</p>
+                </div>
+            </body>
+            </html>
+        `;
+        
+        let iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.top = '-9999px';
+        iframe.style.left = '-9999px';
+        document.body.appendChild(iframe);
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(totalHtml);
+        iframe.contentWindow.document.close();
+        setTimeout(() => {
+            html2pdf().from(iframe.contentWindow.document.body).set({
+                margin: [10, 10, 10, 10],
+                filename: `tasks_report_${currentUser}_${new Date().toISOString().slice(0,10)}.pdf`,
+                html2canvas: { scale: 2, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save().then(() => {
+                document.body.removeChild(iframe);
+            }).catch(err => {
+                document.body.removeChild(iframe);
+                alert("خطا در تولید PDF: " + err.message);
+            });
+        }, 500);
+    }
+
+    function isSameDate(dateStr1, dateStr2) {
+        if (!dateStr1 || !dateStr2) return false;
+        return dateStr1 === dateStr2;
+    }
+
+    function formatGregorianDate(date) {
+        return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    }
+
+    // شروع هفته در تقویم شمسی (شنبه)
+    function getStartOfWeekJalali(date) {
+        let gregorianDay = date.getDay(); // 0=Sunday, 6=Saturday
+        let jalaliWeekday;
+        if (gregorianDay === 0) jalaliWeekday = 1;      // Sunday -> یکشنبه = 1
+        else if (gregorianDay === 6) jalaliWeekday = 0; // Saturday -> شنبه = 0
+        else jalaliWeekday = gregorianDay + 1;
+        let startOfWeek = new Date(date);
+        startOfWeek.setDate(date.getDate() - jalaliWeekday);
+        return startOfWeek;
+    }
+
+    // شروع هفته در تقویم میلادی (یکشنبه)
+    function getStartOfWeekGregorian(date) {
+        let gregorianDay = date.getDay(); // 0=Sunday
+        let startOfWeek = new Date(date);
+        startOfWeek.setDate(date.getDate() - gregorianDay);
+        return startOfWeek;
+    }
+
+    // ساخت سلول برای نمای هفتگی در حالت شمسی
+    function createWeekDayCellJalali(gregorianDate, todayStr, weekDayName) {
+        let cell = document.createElement("div");
+        cell.className = "day-cell";
+        
+        let dateStr = formatGregorianDate(gregorianDate);
+        let jDate = gregorianToJalali(gregorianDate.getFullYear(), gregorianDate.getMonth()+1, gregorianDate.getDate());
+        
+        let isToday = isSameDate(dateStr, todayStr);
+        if (isToday) {
+            cell.classList.add("today");
+        }
+        
+        let dayName = document.createElement("div");
+        dayName.style.fontSize = "0.75rem";
+        dayName.style.fontWeight = "bold";
+        dayName.style.color = "#2563eb";
+        dayName.style.marginBottom = "5px";
+        dayName.innerText = weekDayName;
+        cell.appendChild(dayName);
+        
+        let spanNum = document.createElement("div");
+        spanNum.className = "day-number";
+        spanNum.innerText = jDate.jd;
+        cell.appendChild(spanNum);
+        
+        let smallDate = document.createElement("div");
+        smallDate.className = "date-gregorian-small";
+        smallDate.innerText = `${gregorianDate.getFullYear()}/${gregorianDate.getMonth()+1}/${gregorianDate.getDate()}`;
+        cell.appendChild(smallDate);
+        
+        let tasksForDate = loadTasksForDate(dateStr);
+        let undone = tasksForDate.filter(t => !t.done).length;
+        if (undone > 0) {
+            let badge = document.createElement("span");
+            badge.className = "task-badge";
+            badge.innerText = undone;
+            cell.appendChild(badge);
+        }
+        
+        cell.addEventListener("click", (e) => {
+            e.stopPropagation();
+            selectedDate = dateStr;
+            renderTasksList();
+            document.querySelectorAll(".day-cell").forEach(c => c.classList.remove("selected-day"));
+            cell.classList.add("selected-day");
+        });
+        
+        return cell;
+    }
+
+    // ساخت سلول برای نمای هفتگی در حالت میلادی
+    function createWeekDayCellGregorian(gregorianDate, todayStr, weekDayName) {
+        let cell = document.createElement("div");
+        cell.className = "day-cell";
+        
+        let dateStr = formatGregorianDate(gregorianDate);
+        let jDate = gregorianToJalali(gregorianDate.getFullYear(), gregorianDate.getMonth()+1, gregorianDate.getDate());
+        
+        let isToday = isSameDate(dateStr, todayStr);
+        if (isToday) {
+            cell.classList.add("today");
+            cell.classList.add("today-gregorian");
+        }
+        
+        let dayName = document.createElement("div");
+        dayName.style.fontSize = "0.75rem";
+        dayName.style.fontWeight = "bold";
+        dayName.style.color = "#2563eb";
+        dayName.style.marginBottom = "5px";
+        dayName.innerText = weekDayName;
+        cell.appendChild(dayName);
+        
+        let spanNum = document.createElement("div");
+        spanNum.className = "day-number";
+        spanNum.innerText = gregorianDate.getDate();
+        cell.appendChild(spanNum);
+        
+        let smallDate = document.createElement("div");
+        smallDate.className = "jalali-date-small";
+        smallDate.innerText = `${jDate.jy}/${jDate.jm}/${jDate.jd}`;
+        cell.appendChild(smallDate);
+        
+        let tasksForDate = loadTasksForDate(dateStr);
+        let undone = tasksForDate.filter(t => !t.done).length;
+        if (undone > 0) {
+            let badge = document.createElement("span");
+            badge.className = "task-badge";
+            badge.innerText = undone;
+            cell.appendChild(badge);
+        }
+        
+        cell.addEventListener("click", (e) => {
+            e.stopPropagation();
+            selectedDate = dateStr;
+            renderTasksList();
+            document.querySelectorAll(".day-cell").forEach(c => c.classList.remove("selected-day"));
+            cell.classList.add("selected-day");
+        });
+        
+        return cell;
+    }
+
+    // تابع یکسان برای ساخت سلول در نمای ماهانه (هر دو حالت)
+    function createMonthDayCell(displayNumber, dateStr, isJalaliMode) {
+        let cell = document.createElement("div");
+        cell.className = "day-cell";
+        
+        let todayStr = getTodayGregorian();
+        let isToday = isSameDate(dateStr, todayStr);
+        
+        if (isToday) {
+            cell.classList.add("today");
+        }
+        
+        let spanNum = document.createElement("div");
+        spanNum.className = "day-number";
+        spanNum.innerText = displayNumber;
+        cell.appendChild(spanNum);
+        
+        let parts = dateStr.split('-');
+        let gy = parseInt(parts[0]), gm = parseInt(parts[1]), gd = parseInt(parts[2]);
+        let jDate = gregorianToJalali(gy, gm, gd);
+        
+        let smallDate = document.createElement("div");
+        if (isJalaliMode) {
+            smallDate.className = "date-gregorian-small";
+            smallDate.innerText = `${gy}/${gm}/${gd}`;
+        } else {
+            smallDate.className = "jalali-date-small";
+            smallDate.innerText = `${jDate.jy}/${jDate.jm}/${jDate.jd}`;
+        }
+        cell.appendChild(smallDate);
+        
+        let tasksForDate = loadTasksForDate(dateStr);
+        let undone = tasksForDate.filter(t => !t.done).length;
+        if (undone > 0) {
+            let badge = document.createElement("span");
+            badge.className = "task-badge";
+            badge.innerText = undone;
+            cell.appendChild(badge);
+        }
+        
+        cell.addEventListener("click", (e) => {
+            e.stopPropagation();
+            selectedDate = dateStr;
+            renderTasksList();
+            document.querySelectorAll(".day-cell").forEach(c => c.classList.remove("selected-day"));
+            cell.classList.add("selected-day");
+        });
+        
+        return cell;
+    }
+
+    function renderCalendar() {
+        if (currentView !== "month") return;
+        let container = document.getElementById("calendar");
+        container.innerHTML = "";
+        container.style.display = "grid";
+        container.style.gridTemplateColumns = "repeat(7, 1fr)";
+
+        if (currentMode === "jalali") {
+            let year = currentJYear;
+            let month = currentJMonth;
+            let daysInMonth;
+            if (month < 6) daysInMonth = 31;
+            else if (month < 11) daysInMonth = 30;
+            else daysInMonth = (jalaaliIsLeapYear(year) ? 30 : 29);
+            
+            let firstDayG = jalaliToGregorian(year, month+1, 1);
+            let firstDate = new Date(firstDayG.gy, firstDayG.gm-1, firstDayG.gd);
+            let startWeekday = firstDate.getDay();
+            let startShift;
+            if (startWeekday === 6) startShift = 0;
+            else startShift = startWeekday + 1;
+            startShift = startShift % 7;
+            
+            for (let i = 0; i < startShift; i++) {
+                let empty = document.createElement("div");
+                empty.className = "day-cell empty";
+                empty.style.opacity = "0.4";
+                empty.style.background = "#f8fafc";
+                container.appendChild(empty);
+            }
+            
+            for (let d = 1; d <= daysInMonth; d++) {
+                let g = jalaliToGregorian(year, month+1, d);
+                let dateStr = `${g.gy}-${String(g.gm).padStart(2,'0')}-${String(g.gd).padStart(2,'0')}`;
+                let cell = createMonthDayCell(d, dateStr, true);
+                container.appendChild(cell);
+            }
+        } else {
+            // حالت میلادی
+            let firstDayJ = jalaliToGregorian(currentJYear, currentJMonth+1, 1);
+            let gy = firstDayJ.gy;
+            let gm = firstDayJ.gm - 1;
+            let daysInMonthM = new Date(gy, gm+1, 0).getDate();
+            let startWeekday = new Date(gy, gm, 1).getDay(); // 0 = یکشنبه
+            let startShift = startWeekday;
+            
+            // سلول‌های خالی ابتدای ماه
+            for (let i=0; i<startShift; i++) {
+                let empty = document.createElement("div");
+                empty.className = "day-cell empty";
+                empty.style.opacity = "0.4";
+                empty.style.background = "#f8fafc";
+                container.appendChild(empty);
+            }
+            
+            // سلول‌های روزهای ماه
+            for (let d=1; d<=daysInMonthM; d++) {
+                let dateStr = `${gy}-${String(gm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                let cell = createMonthDayCell(d, dateStr, false);
+                
+                // اضافه کردن کلاس today-gregorian برای سلول امروز در حالت میلادی
+                if(dateStr === getTodayGregorian()){
+                    cell.classList.add("today-gregorian");
+                }
+                
+                container.appendChild(cell);
+            }
+        }
+        updateMonthYearDisplay();
+    }
+
+    function renderWeekView() {
+        let container = document.getElementById("calendar");
+        
+        let baseDate;
+        if (weekStartDate) {
+            baseDate = new Date(weekStartDate);
+        } else if (selectedDate) {
+            baseDate = new Date(selectedDate);
+        } else {
+            let todayJ = getTodayJalali();
+            let todayG = jalaliToGregorian(todayJ.year, todayJ.month, todayJ.day);
+            baseDate = new Date(todayG.gy, todayG.gm-1, todayG.gd);
+        }
+        
+        let startOfWeek;
+        let weekDaysDisplay;
+        
+        if (currentMode === "jalali") {
+            startOfWeek = getStartOfWeekJalali(baseDate);
+            weekDaysDisplay = weekDaysFa;
+        } else {
+            startOfWeek = getStartOfWeekGregorian(baseDate);
+            weekDaysDisplay = weekDaysEn;
+        }
+        
+        weekStartDate = startOfWeek;
+        container.innerHTML = "";
+        container.style.display = "grid";
+        container.style.gridTemplateColumns = "repeat(7, 1fr)";
+        let todayStr = getTodayGregorian();
+        
+        for (let i = 0; i < 7; i++) {
+            let day = new Date(startOfWeek);
+            day.setDate(startOfWeek.getDate() + i);
+            
+            let cell;
+            if (currentMode === "jalali") {
+                cell = createWeekDayCellJalali(day, todayStr, weekDaysDisplay[i]);
+            } else {
+                cell = createWeekDayCellGregorian(day, todayStr, weekDaysDisplay[i]);
+            }
+            container.appendChild(cell);
+        }
+        
+        let startJ = gregorianToJalali(startOfWeek.getFullYear(), startOfWeek.getMonth()+1, startOfWeek.getDate());
+        let endDate = new Date(startOfWeek);
+        endDate.setDate(startOfWeek.getDate() + 6);
+        let endJ = gregorianToJalali(endDate.getFullYear(), endDate.getMonth()+1, endDate.getDate());
+        
+        if (currentMode === "jalali") {
+            document.getElementById("monthYearDisplay").innerText = `هفته ${startJ.jy}/${startJ.jm}/${startJ.jd} تا ${endJ.jy}/${endJ.jm}/${endJ.jd}`;
+        } else {
+            let startG = startOfWeek;
+            let endG = endDate;
+            document.getElementById("monthYearDisplay").innerText = `Week ${startG.getFullYear()}/${startG.getMonth()+1}/${startG.getDate()} - ${endG.getFullYear()}/${endG.getMonth()+1}/${endG.getDate()}`;
+        }
+    }
+
+    function renderDayView() {
+        if (!selectedDate) {
+            let today = getTodayGregorian();
+            selectedDate = today;
+        }
+        let container = document.getElementById("calendar");
+        container.innerHTML = "";
+        container.style.display = "block";
+        let date = new Date(selectedDate);
+        let tasksForDay = loadTasksForDate(selectedDate);
+        
+        let weekDayName;
+        if (currentMode === "jalali") {
+            let jalaliWeekday;
+            let gregorianDay = date.getDay();
+            if (gregorianDay === 0) jalaliWeekday = 1;
+            else if (gregorianDay === 6) jalaliWeekday = 0;
+            else jalaliWeekday = gregorianDay + 1;
+            weekDayName = weekDaysFa[jalaliWeekday];
+        } else {
+            weekDayName = weekDaysEn[date.getDay()];
+        }
+        
+        let dateParts = selectedDate.split('-');
+        let gy = parseInt(dateParts[0]), gm = parseInt(dateParts[1]), gd = parseInt(dateParts[2]);
+        let jDate = gregorianToJalali(gy, gm, gd);
+        let persianDateStr = `${jDate.jy}/${jDate.jm}/${jDate.jd}`;
+        let gregorianDateStr = `${gy}/${gm}/${gd}`;
+        
+        let html = `<div style="padding: 20px; text-align: center; background: #f8fafc; border-radius: 24px;">
+            <h3>${weekDayName}</h3>
+            <div style="margin: 10px 0; font-size: 1.1rem; background: #e2e8f0; border-radius: 30px; padding: 8px; display: inline-block; width: auto;">
+                شمسی: ${persianDateStr} &nbsp;|&nbsp; میلادی: ${gregorianDateStr}
+            </div>
+            <div style="margin-top: 20px;">`;
+        if (tasksForDay.length === 0) {
+            html += "<p style='color: #10b981;'>هیچ کاری برای این روز ثبت نشده است.</p>";
+        } else {
+            html += `<ul style="text-align: right; list-style: none;">`;
+            tasksForDay.forEach(task => {
+                let color = task.priority === 'high' ? '#dc2626' : (task.priority === 'medium' ? '#f59e0b' : '#10b981');
+                html += `<li style="margin: 10px 0; padding: 8px; background: white; border-radius: 12px; color: ${color}; ${task.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${escapeHtml(task.title)}</li>`;
+            });
+            html += `</ul>`;
+        }
+        html += `</div></div>`;
+        container.innerHTML = html;
+        
+        if (currentMode === "jalali") {
+            document.getElementById("monthYearDisplay").innerText = `${weekDayName} ${persianDateStr}`;
+        } else {
+            document.getElementById("monthYearDisplay").innerText = `${weekDayName} ${gregorianDateStr}`;
+        }
+    }
+
+    function updateMonthYearDisplay() {
+        let disp = document.getElementById("monthYearDisplay");
+        let monthNamesJ = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
+        if (currentMode === "jalali") {
+            disp.innerText = `${monthNamesJ[currentJMonth]} ${currentJYear}`;
+        } else {
+            let first = jalaliToGregorian(currentJYear, currentJMonth+1, 1);
+            let monthNamesE = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            disp.innerText = `${monthNamesE[first.gm-1]} ${first.gy}`;
+        }
+    }
+
+    function renderTasksList() {
+        let container = document.getElementById("tasksContainer");
+        let label = document.getElementById("selectedDateLabel");
+        if (!selectedDate) {
+            label.innerText = "هیچ روزی انتخاب نشده";
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#64748b;">روزی از تقویم انتخاب کنید</div>';
+            return;
+        }
+        let parts = selectedDate.split('-');
+        let gy = parseInt(parts[0]), gm = parseInt(parts[1]), gd = parseInt(parts[2]);
+        let j = gregorianToJalali(gy, gm, gd);
+        label.innerText = `${j.jy}/${j.jm}/${j.jd} (میلادی: ${selectedDate})`;
+        let list = loadTasksForDate(selectedDate);
+        if (list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#10b981;">هیچ کاری ثبت نشده</div>';
+            return;
+        }
+        let sorted = [...list].sort((a,b) => {
+            let p = {high:0, medium:1, low:2};
+            if(a.done !== b.done) return a.done ? 1 : -1;
+            return p[a.priority] - p[b.priority];
+        });
+        container.innerHTML = sorted.map((task, idx) => {
+            let originalIdx = list.indexOf(task);
+            let priorityColor = task.priority === 'high' ? '#dc2626' : (task.priority === 'medium' ? '#f59e0b' : '#10b981');
+            let doneClass = task.done ? 'task-done' : '';
+            return `
+                <div class="task-item" style="border-right-color: ${priorityColor};">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${originalIdx})">
+                        <span class="task-title ${doneClass}">${escapeHtml(task.title)}</span>
+                        <span style="font-size:0.7rem; background:#f1f5f9; padding:2px 10px; border-radius:20px; color:${priorityColor};">${task.priority === 'high' ? 'بالا' : (task.priority === 'medium' ? 'متوسط' : 'کم')}</span>
+                    </div>
+                    <div class="task-actions">
+                        <button onclick="editTaskFunc(${originalIdx})" style="background:#e2e8f0;">✏️</button>
+                        <button onclick="deleteTaskFunc(${originalIdx})" style="background:#fee2e2; color:#dc2626;">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.toggleTask = function(idx) { if (!selectedDate || !tasks[selectedDate]) return; tasks[selectedDate][idx].done = !tasks[selectedDate][idx].done; saveTasksForDate(selectedDate); renderTasksList(); if (currentView === "month") renderCalendar(); else if (currentView === "week") renderWeekView(); else if (currentView === "day") renderDayView(); };
+    window.deleteTaskFunc = function(idx) { if (!selectedDate || !tasks[selectedDate]) return; if (confirm("آیا از حذف این کار مطمئن هستید؟")) { tasks[selectedDate].splice(idx, 1); saveTasksForDate(selectedDate); renderTasksList(); if (currentView === "month") renderCalendar(); else if (currentView === "week") renderWeekView(); else if (currentView === "day") renderDayView(); } };
+    window.editTaskFunc = function(idx) { if (!selectedDate || !tasks[selectedDate]) return; let newTitle = prompt("عنوان جدید:", tasks[selectedDate][idx].title); if (newTitle && newTitle.trim()) { tasks[selectedDate][idx].title = newTitle.trim(); saveTasksForDate(selectedDate); renderTasksList(); if (currentView === "month") renderCalendar(); else if (currentView === "week") renderWeekView(); else if (currentView === "day") renderDayView(); } };
+    
+    function addTask() { if (!currentUser) { alert("لطفاً ابتدا وارد شوید."); return; } if (!selectedDate) { alert("ابتدا یک روز از تقویم را انتخاب کنید."); return; } let title = document.getElementById("taskTitle").value.trim(); if (!title) { alert("عنوان کار را وارد کنید."); return; } let priority = document.getElementById("taskPriority").value; if (!tasks[selectedDate]) tasks[selectedDate] = []; tasks[selectedDate].push({ title: title, priority: priority, done: false }); saveTasksForDate(selectedDate); document.getElementById("taskTitle").value = ""; renderTasksList(); if (currentView === "month") renderCalendar(); else if (currentView === "week") renderWeekView(); else if (currentView === "day") renderDayView(); }
+    
+    function setView(view) { 
+        currentView = view; 
+        let monthBtn = document.getElementById("monthViewBtn"); 
+        let weekBtn = document.getElementById("weekViewBtn"); 
+        let dayBtn = document.getElementById("dayViewBtn"); 
+        monthBtn.classList.remove("btn-primary"); 
+        weekBtn.classList.remove("btn-primary"); 
+        dayBtn.classList.remove("btn-primary"); 
+        if (view === "month") { 
+            monthBtn.classList.add("btn-primary"); 
+            weekStartDate = null;
+            renderCalendar(); 
+        } else if (view === "week") { 
+            weekBtn.classList.add("btn-primary"); 
+            renderWeekView(); 
+        } else if (view === "day") { 
+            dayBtn.classList.add("btn-primary"); 
+            renderDayView(); 
+        } 
+    }
+    
+    function prevMonth() { 
+        if (currentView === "month") {
+            if (currentJMonth === 0) { 
+                currentJMonth = 11; 
+                currentJYear--; 
+            } else { 
+                currentJMonth--; 
+            }
+            renderCalendar();
+        } else if (currentView === "week") {
+            if (weekStartDate) {
+                let newStart = new Date(weekStartDate);
+                newStart.setDate(weekStartDate.getDate() - 7);
+                weekStartDate = newStart;
+                renderWeekView();
+            } else {
+                if (!selectedDate) {
+                    let today = getTodayGregorian();
+                    selectedDate = today;
+                }
+                let base = new Date(selectedDate);
+                base.setDate(base.getDate() - 7);
+                if (currentMode === "jalali") {
+                    weekStartDate = getStartOfWeekJalali(base);
+                } else {
+                    weekStartDate = getStartOfWeekGregorian(base);
+                }
+                renderWeekView();
+            }
+        }
+    }
+    
+    function nextMonth() { 
+        if (currentView === "month") {
+            if (currentJMonth === 11) { 
+                currentJMonth = 0; 
+                currentJYear++; 
+            } else { 
+                currentJMonth++; 
+            }
+            renderCalendar();
+        } else if (currentView === "week") {
+            if (weekStartDate) {
+                let newStart = new Date(weekStartDate);
+                newStart.setDate(weekStartDate.getDate() + 7);
+                weekStartDate = newStart;
+                renderWeekView();
+            } else {
+                if (!selectedDate) {
+                    let today = getTodayGregorian();
+                    selectedDate = today;
+                }
+                let base = new Date(selectedDate);
+                base.setDate(base.getDate() + 7);
+                if (currentMode === "jalali") {
+                    weekStartDate = getStartOfWeekJalali(base);
+                } else {
+                    weekStartDate = getStartOfWeekGregorian(base);
+                }
+                renderWeekView();
+            }
+        }
+    }
+    
+    function setMode(mode) { 
+        currentMode = mode; 
+        updateWeekdays(); 
+        weekStartDate = null;
+        if (currentView === "month") {
+            renderCalendar(); 
+        } else if (currentView === "week") {
+            renderWeekView();
+        } else if (currentView === "day") { 
+            renderDayView(); 
+        }
+        let jalaliBtn = document.getElementById("jalaliModeBtn"); 
+        let gregBtn = document.getElementById("gregorianModeBtn"); 
+        if (mode === "jalali") { 
+            jalaliBtn.classList.add("btn-primary"); 
+            gregBtn.classList.remove("btn-primary"); 
+        } else { 
+            gregBtn.classList.add("btn-primary"); 
+            jalaliBtn.classList.remove("btn-primary"); 
+        } 
+    }
+    
+    function syncWithGoogle() { if (!currentUser) { alert("ابتدا وارد شوید."); return; } alert("قابلیت سینک با گوگل تقویم در این نسخه آماده شده است.\nبرای استفاده واقعی، کلید API معتبر نیاز است."); }
+    
+    function showMainApp() {
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("mainApp").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "block";
+        let today = getTodayJalali();
+        currentJYear = today.year;
+        currentJMonth = today.month - 1;
+        let todayGregorian = getTodayGregorian();
+        selectedDate = todayGregorian;
+        weekStartDate = null;
+        updateWeekdays();
+        renderCalendar();
+        renderTasksList();
+        setTimeout(() => { 
+            let todayStr = getTodayGregorian(); 
+            let cells = document.querySelectorAll(".day-cell"); 
+            for (let cell of cells) { 
+                if (cell.classList && cell.classList.contains("today")) { 
+                    cell.classList.add("selected-day"); 
+                    break; 
+                } 
+            } 
+        }, 100);
+    }
+    
+    function init() {
+        updateGlobalToday();
+        let savedUser = localStorage.getItem("current_user");
+        if (savedUser) { 
+            let users = loadUsers(); 
+            if (users[savedUser]) { 
+                currentUser = savedUser; 
+                loadUserTasks(); 
+                showMainApp(); 
+            } 
+        }
+        document.getElementById("doLoginBtn").onclick = () => { 
+            let user = document.getElementById("loginUsername").value.trim(); 
+            let pass = document.getElementById("loginPassword").value; 
+            let msgDiv = document.getElementById("loginMessage"); 
+            if (!user || !pass) { 
+                msgDiv.innerHTML = '<div class="login-error">لطفاً نام کاربری و رمز عبور را وارد کنید</div>'; 
+                return; 
+            } 
+            if (login(user, pass)) { 
+                msgDiv.innerHTML = '<div class="login-success">ورود موفق! در حال انتقال...</div>'; 
+                setTimeout(() => showMainApp(), 500); 
+            } else { 
+                msgDiv.innerHTML = '<div class="login-error">نام کاربری یا رمز عبور اشتباه است</div>'; 
+            } 
+        };
+        document.getElementById("doSignupBtn").onclick = () => { 
+            let user = document.getElementById("loginUsername").value.trim(); 
+            let pass = document.getElementById("loginPassword").value; 
+            let msgDiv = document.getElementById("loginMessage"); 
+            if (!user || !pass) { 
+                msgDiv.innerHTML = '<div class="login-error">لطفاً نام کاربری و رمز عبور را وارد کنید</div>'; 
+                return; 
+            } 
+            if (pass.length < 3) { 
+                msgDiv.innerHTML = '<div class="login-error">رمز عبور باید حداقل ۳ کاراکتر باشد</div>'; 
+                return; 
+            } 
+            if (signup(user, pass)) { 
+                msgDiv.innerHTML = '<div class="login-success">ثبت‌نام موفق! در حال انتقال...</div>'; 
+                setTimeout(() => showMainApp(), 500); 
+            } else { 
+                msgDiv.innerHTML = '<div class="login-error">این نام کاربری قبلاً ثبت شده است</div>'; 
+            } 
+        };
+        document.getElementById("logoutBtn").onclick = () => { logout(); };
+        document.getElementById("prevBtn").onclick = prevMonth;
+        document.getElementById("nextBtn").onclick = nextMonth;
+        document.getElementById("monthViewBtn").onclick = () => setView("month");
+        document.getElementById("weekViewBtn").onclick = () => setView("week");
+        document.getElementById("dayViewBtn").onclick = () => setView("day");
+        document.getElementById("jalaliModeBtn").onclick = () => setMode("jalali");
+        document.getElementById("gregorianModeBtn").onclick = () => setMode("gregorian");
+        document.getElementById("addTaskBtn").onclick = addTask;
+        document.getElementById("exportPDFBtn").onclick = exportToPDF;
+        document.getElementById("syncGoogleBtn").onclick = syncWithGoogle;
+    }
+    init();
+</script>
+</body>
+</html>
