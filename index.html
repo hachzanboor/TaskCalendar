@@ -1035,8 +1035,24 @@
     
     function addTask() { if (!currentUser) { alert("لطفاً ابتدا وارد شوید."); return; } if (!selectedDate) { alert("ابتدا یک روز از تقویم را انتخاب کنید."); return; } let title = document.getElementById("taskTitle").value.trim(); if (!title) { alert("عنوان کار را وارد کنید."); return; } let priority = document.getElementById("taskPriority").value; if (!tasks[selectedDate]) tasks[selectedDate] = []; tasks[selectedDate].push({ title: title, priority: priority, done: false }); saveTasksForDate(selectedDate); document.getElementById("taskTitle").value = ""; renderTasksList(); if (currentView === "month") renderCalendar(); else if (currentView === "week") renderWeekView(); else if (currentView === "day") renderDayView(); }
     
+    function updateNavigationButtons() {
+        let prevBtn = document.getElementById("prevBtn");
+        let nextBtn = document.getElementById("nextBtn");
+        if (currentView === "month") {
+            prevBtn.innerText = "◀ ماه قبل";
+            nextBtn.innerText = "ماه بعد ▶";
+        } else if (currentView === "week") {
+            prevBtn.innerText = "◀ هفته قبل";
+            nextBtn.innerText = "هفته بعد ▶";
+        } else if (currentView === "day") {
+            prevBtn.innerText = "◀ روز قبل";
+            nextBtn.innerText = "روز بعد ▶";
+        }
+    }
+    
     function setView(view) { 
         currentView = view; 
+        updateNavigationButtons();
         let monthBtn = document.getElementById("monthViewBtn"); 
         let weekBtn = document.getElementById("weekViewBtn"); 
         let dayBtn = document.getElementById("dayViewBtn"); 
@@ -1085,6 +1101,15 @@
                 }
                 renderWeekView();
             }
+        } else if (currentView === "day") {
+            if (!selectedDate) {
+                selectedDate = getTodayGregorian();
+            }
+            let newDate = new Date(selectedDate);
+            newDate.setDate(newDate.getDate() - 1);
+            selectedDate = formatGregorianDate(newDate);
+            renderDayView();
+            renderTasksList();
         }
     }
     
@@ -1117,6 +1142,15 @@
                 }
                 renderWeekView();
             }
+        } else if (currentView === "day") {
+            if (!selectedDate) {
+                selectedDate = getTodayGregorian();
+            }
+            let newDate = new Date(selectedDate);
+            newDate.setDate(newDate.getDate() + 1);
+            selectedDate = formatGregorianDate(newDate);
+            renderDayView();
+            renderTasksList();
         }
     }
     
