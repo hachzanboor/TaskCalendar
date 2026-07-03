@@ -305,7 +305,7 @@
             </div>
             <div class="toolbar-group">
                 <button id="exportPDFBtn" class="btn-success">خروجی PDF</button>
-                <button id="syncGoogleBtn">سینک با گوگل</button>
+                <button id="syncGoogleBtn">افزودن به Google Calendar</button>
             </div>
         </div>
         <div class="toolbar-row">
@@ -1176,7 +1176,78 @@
         } 
     }
     
-    function syncWithGoogle() { if (!currentUser) { alert("ابتدا وارد شوید."); return; } alert("قابلیت سینک با گوگل تقویم در این نسخه آماده شده است.\nبرای استفاده واقعی، کلید API معتبر نیاز است."); }
+    function formatGoogleCalendarDate(dateStr) {
+        return dateStr.replace(/-/g, "");
+    }
+
+    function getNextDayForGoogleCalendar(dateStr) {
+        let parts = dateStr.split("-");
+        let d = new Date(
+            parseInt(parts[0]),
+            parseInt(parts[1]) - 1,
+            parseInt(parts[2])
+        );
+
+        d.setDate(d.getDate() + 1);
+
+        let y = d.getFullYear();
+        let m = String(d.getMonth() + 1).padStart(2, "0");
+        let day = String(d.getDate()).padStart(2, "0");
+
+        return `${y}${m}${day}`;
+    }
+
+    function syncWithGoogle() {
+        if (!currentUser) {
+            alert("ابتدا وارد شوید.");
+            return;
+        }
+
+        if (!selectedDate) {
+            alert("ابتدا یک روز را از تقویم انتخاب کنید.");
+            return;
+        }
+
+        let list = tasks[selectedDate] || [];
+
+        if (list.length === 0) {
+            alert("برای این روز کاری ثبت نشده است.");
+            return;
+        }
+
+        let parts = selectedDate.split("-");
+        let jDate = gregorianToJalali(
+            parseInt(parts[0]),
+            parseInt(parts[1]),
+            parseInt(parts[2])
+        );
+
+        let eventTitle = `کارهای روز ${jDate.jy}/${jDate.jm}/${jDate.jd}`;
+
+        let details = `کارهای ثبت‌شده در سامانه مدیریت کارهای شخصی:\n\n`;
+
+        list.forEach((task, index) => {
+            let priorityFa = task.priority === "high" ? "بالا" :
+                             task.priority === "medium" ? "متوسط" : "کم";
+
+            let statusFa = task.done ? "انجام شده" : "انجام نشده";
+
+            details += `${index + 1}. ${task.title}\n`;
+            details += `اولویت: ${priorityFa}\n`;
+            details += `وضعیت: ${statusFa}\n\n`;
+        });
+
+        let startDate = formatGoogleCalendarDate(selectedDate);
+        let endDate = getNextDayForGoogleCalendar(selectedDate);
+
+        let googleCalendarUrl =
+            "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+            "&text=" + encodeURIComponent(eventTitle) +
+            "&dates=" + startDate + "/" + endDate +
+            "&details=" + encodeURIComponent(details);
+
+        window.open(googleCalendarUrl, "_blank");
+    }
     
     function showMainApp() {
         document.getElementById("loginPage").style.display = "none";
