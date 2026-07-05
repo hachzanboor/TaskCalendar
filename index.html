@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -274,6 +274,339 @@
             background: #ef4444;
             color: white;
         }
+
+
+        /* ======================== اصلاح کامل نسخه موبایل ======================== */
+        @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            body {
+                padding: 10px;
+                padding-bottom: 78px;
+                min-height: 100svh;
+            }
+
+            .login-container {
+                width: 100%;
+                max-width: none;
+                margin: 24px auto;
+                border-radius: 22px;
+            }
+
+            .login-header {
+                padding: 24px 16px;
+            }
+
+            .login-header h1,
+            .header h1 {
+                font-size: 1.25rem;
+                line-height: 1.6;
+            }
+
+            .login-header p {
+                font-size: 0.9rem;
+                line-height: 1.8;
+            }
+
+            .login-form {
+                padding: 20px 16px;
+            }
+
+            .login-form input,
+            .login-form button {
+                min-height: 46px;
+                font-size: 0.95rem;
+            }
+
+            .main-container {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 20px;
+            }
+
+            .header {
+                padding: 16px 12px;
+            }
+
+            .toolbar {
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .toolbar-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .toolbar-group {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+                justify-content: stretch;
+            }
+
+            .toolbar-row:nth-of-type(2) .toolbar-group:first-child {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .toolbar-row:nth-of-type(2) .toolbar-group:nth-child(2) {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            #syncGoogleBtn,
+            .month-year {
+                grid-column: 1 / -1;
+            }
+
+            button {
+                width: 100%;
+                min-height: 42px;
+                padding: 9px 8px;
+                font-size: 0.78rem;
+                line-height: 1.45;
+                white-space: normal;
+                border-radius: 18px;
+            }
+
+            button:hover,
+            .day-cell:hover,
+            .task-item:hover {
+                transform: none;
+            }
+
+            .month-year {
+                width: 100%;
+                text-align: center;
+                padding: 10px 8px;
+                border-radius: 18px;
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+
+            .weekdays {
+                grid-template-columns: repeat(7, minmax(0, 1fr));
+                margin: 8px;
+                padding: 8px 0;
+                border-radius: 14px;
+                font-size: 0.68rem;
+                line-height: 1.6;
+            }
+
+            .weekdays span {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding: 0 1px;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .day-cell {
+                min-width: 0;
+                min-height: 58px;
+                padding: 6px 1px;
+                border-radius: 10px;
+                box-shadow: none;
+                overflow: hidden;
+            }
+
+            .day-number {
+                font-size: 0.95rem;
+                line-height: 1.3;
+            }
+
+            .date-gregorian-small,
+            .jalali-date-small {
+                font-size: 0.52rem;
+                margin-top: 3px;
+                line-height: 1.4;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .task-badge {
+                top: 3px;
+                left: 3px;
+                padding: 1px 5px;
+                font-size: 0.58rem;
+                line-height: 1.4;
+            }
+
+            .today,
+            .today-gregorian,
+            .selected-day {
+                border-width: 1px !important;
+                box-shadow: none !important;
+            }
+
+            .tasks-section {
+                padding: 12px;
+            }
+
+            .tasks-section h3 {
+                font-size: 0.95rem;
+                line-height: 1.8;
+            }
+
+            #selectedDateLabel {
+                display: block;
+                margin-top: 4px;
+                font-size: 0.85rem;
+                word-break: break-word;
+            }
+
+            .task-form {
+                flex-direction: column;
+                gap: 8px;
+                padding: 10px;
+                border-radius: 16px;
+            }
+
+            .task-form input,
+            .task-form select,
+            .task-form button {
+                width: 100%;
+                flex: none;
+                min-height: 44px;
+                font-size: 0.9rem;
+            }
+
+            .task-list {
+                max-height: 45vh;
+            }
+
+            .task-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 10px;
+                border-radius: 14px;
+                border-right-width: 4px;
+            }
+
+            .task-item > div:first-child {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px !important;
+                align-items: center;
+            }
+
+            .task-title {
+                flex: 1 1 150px;
+                min-width: 0;
+                line-height: 1.8;
+                word-break: break-word;
+            }
+
+            .task-actions {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .task-actions button {
+                margin: 0;
+                padding: 8px;
+                border-radius: 14px;
+            }
+
+            .fixed-buttons {
+                left: 50%;
+                right: auto;
+                bottom: 10px;
+                width: calc(100% - 20px);
+                transform: translateX(-50%);
+                justify-content: center;
+                pointer-events: none;
+            }
+
+            .fixed-buttons button {
+                pointer-events: auto;
+                width: 100%;
+                max-width: 420px;
+                min-height: 44px;
+                box-shadow: 0 8px 20px rgba(239, 68, 68, 0.28);
+            }
+
+            #calendar[style*="display: block"] > div {
+                margin: 8px;
+                padding: 14px 10px !important;
+                border-radius: 16px !important;
+            }
+
+            #calendar[style*="display: block"] h3 {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+
+            #calendar[style*="display: block"] div[style*="inline-block"] {
+                width: 100% !important;
+                max-width: 100%;
+                font-size: 0.82rem !important;
+                line-height: 1.9;
+                white-space: normal;
+            }
+
+            #calendar[style*="display: block"] ul {
+                padding: 0;
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 8px;
+                padding-bottom: 74px;
+            }
+
+            .header h1,
+            .login-header h1 {
+                font-size: 1.12rem;
+            }
+
+            button {
+                font-size: 0.72rem;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .weekdays {
+                font-size: 0.61rem;
+                margin: 6px;
+            }
+
+            .calendar-grid {
+                gap: 3px;
+                padding: 6px;
+            }
+
+            .day-cell {
+                min-height: 50px;
+                border-radius: 8px;
+            }
+
+            .day-number {
+                font-size: 0.88rem;
+            }
+
+            .date-gregorian-small,
+            .jalali-date-small {
+                display: none;
+            }
+        }
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -556,7 +889,340 @@
                     th { background: #3b82f6; color: white; padding: 10px; border: 1px solid #ccc; }
                     td { border: 1px solid #ddd; padding: 8px; }
                     .footer { margin-top: 30px; padding: 15px; background: #f1f5f9; border-radius: 10px; text-align: center; font-size: 12px; }
-                </style>
+            
+
+        /* ======================== اصلاح کامل نسخه موبایل ======================== */
+        @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            body {
+                padding: 10px;
+                padding-bottom: 78px;
+                min-height: 100svh;
+            }
+
+            .login-container {
+                width: 100%;
+                max-width: none;
+                margin: 24px auto;
+                border-radius: 22px;
+            }
+
+            .login-header {
+                padding: 24px 16px;
+            }
+
+            .login-header h1,
+            .header h1 {
+                font-size: 1.25rem;
+                line-height: 1.6;
+            }
+
+            .login-header p {
+                font-size: 0.9rem;
+                line-height: 1.8;
+            }
+
+            .login-form {
+                padding: 20px 16px;
+            }
+
+            .login-form input,
+            .login-form button {
+                min-height: 46px;
+                font-size: 0.95rem;
+            }
+
+            .main-container {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 20px;
+            }
+
+            .header {
+                padding: 16px 12px;
+            }
+
+            .toolbar {
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .toolbar-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .toolbar-group {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+                justify-content: stretch;
+            }
+
+            .toolbar-row:nth-of-type(2) .toolbar-group:first-child {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .toolbar-row:nth-of-type(2) .toolbar-group:nth-child(2) {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            #syncGoogleBtn,
+            .month-year {
+                grid-column: 1 / -1;
+            }
+
+            button {
+                width: 100%;
+                min-height: 42px;
+                padding: 9px 8px;
+                font-size: 0.78rem;
+                line-height: 1.45;
+                white-space: normal;
+                border-radius: 18px;
+            }
+
+            button:hover,
+            .day-cell:hover,
+            .task-item:hover {
+                transform: none;
+            }
+
+            .month-year {
+                width: 100%;
+                text-align: center;
+                padding: 10px 8px;
+                border-radius: 18px;
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+
+            .weekdays {
+                grid-template-columns: repeat(7, minmax(0, 1fr));
+                margin: 8px;
+                padding: 8px 0;
+                border-radius: 14px;
+                font-size: 0.68rem;
+                line-height: 1.6;
+            }
+
+            .weekdays span {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding: 0 1px;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .day-cell {
+                min-width: 0;
+                min-height: 58px;
+                padding: 6px 1px;
+                border-radius: 10px;
+                box-shadow: none;
+                overflow: hidden;
+            }
+
+            .day-number {
+                font-size: 0.95rem;
+                line-height: 1.3;
+            }
+
+            .date-gregorian-small,
+            .jalali-date-small {
+                font-size: 0.52rem;
+                margin-top: 3px;
+                line-height: 1.4;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .task-badge {
+                top: 3px;
+                left: 3px;
+                padding: 1px 5px;
+                font-size: 0.58rem;
+                line-height: 1.4;
+            }
+
+            .today,
+            .today-gregorian,
+            .selected-day {
+                border-width: 1px !important;
+                box-shadow: none !important;
+            }
+
+            .tasks-section {
+                padding: 12px;
+            }
+
+            .tasks-section h3 {
+                font-size: 0.95rem;
+                line-height: 1.8;
+            }
+
+            #selectedDateLabel {
+                display: block;
+                margin-top: 4px;
+                font-size: 0.85rem;
+                word-break: break-word;
+            }
+
+            .task-form {
+                flex-direction: column;
+                gap: 8px;
+                padding: 10px;
+                border-radius: 16px;
+            }
+
+            .task-form input,
+            .task-form select,
+            .task-form button {
+                width: 100%;
+                flex: none;
+                min-height: 44px;
+                font-size: 0.9rem;
+            }
+
+            .task-list {
+                max-height: 45vh;
+            }
+
+            .task-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 10px;
+                border-radius: 14px;
+                border-right-width: 4px;
+            }
+
+            .task-item > div:first-child {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px !important;
+                align-items: center;
+            }
+
+            .task-title {
+                flex: 1 1 150px;
+                min-width: 0;
+                line-height: 1.8;
+                word-break: break-word;
+            }
+
+            .task-actions {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .task-actions button {
+                margin: 0;
+                padding: 8px;
+                border-radius: 14px;
+            }
+
+            .fixed-buttons {
+                left: 50%;
+                right: auto;
+                bottom: 10px;
+                width: calc(100% - 20px);
+                transform: translateX(-50%);
+                justify-content: center;
+                pointer-events: none;
+            }
+
+            .fixed-buttons button {
+                pointer-events: auto;
+                width: 100%;
+                max-width: 420px;
+                min-height: 44px;
+                box-shadow: 0 8px 20px rgba(239, 68, 68, 0.28);
+            }
+
+            #calendar[style*="display: block"] > div {
+                margin: 8px;
+                padding: 14px 10px !important;
+                border-radius: 16px !important;
+            }
+
+            #calendar[style*="display: block"] h3 {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+
+            #calendar[style*="display: block"] div[style*="inline-block"] {
+                width: 100% !important;
+                max-width: 100%;
+                font-size: 0.82rem !important;
+                line-height: 1.9;
+                white-space: normal;
+            }
+
+            #calendar[style*="display: block"] ul {
+                padding: 0;
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 8px;
+                padding-bottom: 74px;
+            }
+
+            .header h1,
+            .login-header h1 {
+                font-size: 1.12rem;
+            }
+
+            button {
+                font-size: 0.72rem;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .weekdays {
+                font-size: 0.61rem;
+                margin: 6px;
+            }
+
+            .calendar-grid {
+                gap: 3px;
+                padding: 6px;
+            }
+
+            .day-cell {
+                min-height: 50px;
+                border-radius: 8px;
+            }
+
+            .day-number {
+                font-size: 0.88rem;
+            }
+
+            .date-gregorian-small,
+            .jalali-date-small {
+                display: none;
+            }
+        }
+
+    </style>
             </head>
             <body>
                 <div class="header">
